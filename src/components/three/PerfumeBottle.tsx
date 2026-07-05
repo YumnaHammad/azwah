@@ -7,101 +7,148 @@ import { useSceneState } from "@/components/providers/SceneProvider";
 import {
   useGlassMaterial,
   useGoldMaterial,
-  useLiquidMaterial,
+  useOudLiquidMaterial,
 } from "@/lib/materials";
 
+/** Luxury Oud bottle — fixed neck + pump, cap lifts separately */
 export function PerfumeBottle() {
   const groupRef = useRef<THREE.Group>(null);
   const capRef = useRef<THREE.Group>(null);
+  const atomizerRef = useRef<THREE.Group>(null);
+  const tubeRef = useRef<THREE.Mesh>(null);
   const state = useSceneState();
 
   const glassMat = useGlassMaterial();
   const goldMat = useGoldMaterial();
-  const liquidMat = useLiquidMaterial();
+  const oudMat = useOudLiquidMaterial();
 
-  const bodyGeometry = useMemo(() => {
-    const shape = new THREE.Shape();
-    shape.moveTo(0, 0);
-    shape.bezierCurveTo(0.15, 0, 0.5, 0.02, 0.62, 0.05);
-    shape.lineTo(0.68, 0.35);
-    shape.bezierCurveTo(0.7, 0.8, 0.62, 1.6, 0.58, 2.1);
-    shape.bezierCurveTo(0.52, 2.45, 0.42, 2.65, 0.35, 2.72);
-    shape.lineTo(-0.35, 2.72);
-    shape.bezierCurveTo(-0.42, 2.65, -0.52, 2.45, -0.58, 2.1);
-    shape.bezierCurveTo(-0.62, 1.6, -0.7, 0.8, -0.68, 0.35);
-    shape.lineTo(-0.62, 0.05);
-    shape.bezierCurveTo(-0.5, 0.02, -0.15, 0, 0, 0);
+  const tubeMat = useMemo(() => {
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color("#f0ece4"),
+      metalness: 0.05,
+      roughness: 0.08,
+      transmission: 0.75,
+      thickness: 0.12,
+      transparent: true,
+      opacity: 0.55,
+      ior: 1.42,
+    });
+    mat.userData.skipFade = true;
+    return mat;
+  }, []);
 
-    return new THREE.LatheGeometry(shape.getPoints(48), 48);
+  const pumpMat = useMemo(() => {
+    const mat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color("#e8e4dc"),
+      metalness: 0.95,
+      roughness: 0.1,
+    });
+    mat.userData.skipFade = true;
+    return mat;
   }, []);
 
   useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y =
-        state.bottleRotation + performance.now() * 0.00006;
+        state.bottleRotation + performance.now() * 0.00005;
     }
 
     if (capRef.current) {
-      const lift = state.capLift * 0.65;
-      const rotation = state.capLift * 0.35;
-      capRef.current.position.y = 2.78 + lift;
-      capRef.current.rotation.y = rotation;
-      capRef.current.rotation.z = state.capLift * 0.08;
+      const unlock = state.capUnlock * Math.PI * 0.3;
+      const lift = state.capLift * 0.55;
+      capRef.current.rotation.y = unlock;
+      capRef.current.position.y = 1.58 + lift;
+      capRef.current.position.x = state.capLift * 0.12;
+      capRef.current.rotation.z = state.capLift * 0.05;
+    }
+
+    if (atomizerRef.current) {
+      atomizerRef.current.position.y = -state.atomizerPress * 0.035;
+    }
+
+    if (tubeRef.current) {
+      tubeMat.opacity = 0.2 + state.dipTubeVisible * 0.75;
     }
   });
 
   return (
-    <group ref={groupRef} position={[0, 0.2, 0]}>
-      <mesh geometry={bodyGeometry} material={glassMat} castShadow receiveShadow />
-
-      <mesh position={[0, 0.85, 0]} scale={[0.82, 0.78, 0.82]}>
-        <cylinderGeometry args={[0.46, 0.5, 1.45, 48]} />
-        <primitive object={liquidMat} attach="material" />
+    <group ref={groupRef} position={[0, 0.05, 0]}>
+      {/* Glass body */}
+      <mesh position={[0, 0.69, 0]} castShadow receiveShadow material={glassMat}>
+        <boxGeometry args={[0.68, 1.38, 0.48]} />
       </mesh>
 
-      <mesh position={[0, 2.55, 0]}>
-        <cylinderGeometry args={[0.2, 0.24, 0.14, 48]} />
-        <primitive object={goldMat} attach="material" />
+      {/* Oud liquid */}
+      <mesh position={[0, 0.58, 0]} material={oudMat}>
+        <boxGeometry args={[0.52, 0.88, 0.34]} />
       </mesh>
 
-      <group ref={capRef} position={[0, 2.78, 0]}>
-        <mesh>
-          <cylinderGeometry args={[0.26, 0.28, 0.38, 48]} />
-          <primitive object={goldMat} attach="material" />
-        </mesh>
-        <mesh position={[0, 0.24, 0]}>
-          <sphereGeometry
-            args={[0.26, 48, 16, 0, Math.PI * 2, 0, Math.PI / 2]}
-          />
-          <primitive object={goldMat} attach="material" />
-        </mesh>
-        <mesh position={[0, -0.1, 0]}>
-          <cylinderGeometry args={[0.05, 0.07, 0.12, 16]} />
-          <meshStandardMaterial color="#c9c9c9" metalness={0.95} roughness={0.15} />
-        </mesh>
-      </group>
-
-      <mesh position={[0, 1.25, 0.54]}>
-        <boxGeometry args={[0.75, 0.55, 0.015]} />
-        <meshStandardMaterial
-          color="#B89A3E"
-          metalness={0.85}
-          roughness={0.25}
-          transparent
-          opacity={0.95}
-        />
+      {/* Gold base plate */}
+      <mesh position={[0, 0.04, 0]} material={goldMat}>
+        <boxGeometry args={[0.7, 0.05, 0.5]} />
       </mesh>
 
-      <mesh position={[0, 1.25, 0.555]}>
-        <planeGeometry args={[0.5, 0.08]} />
+      {/* Gold shoulder band */}
+      <mesh position={[0, 1.22, 0]} material={goldMat}>
+        <boxGeometry args={[0.62, 0.04, 0.44]} />
+      </mesh>
+
+      {/* Front label */}
+      <mesh position={[0, 0.72, 0.248]} material={goldMat}>
+        <boxGeometry args={[0.42, 0.32, 0.012]} />
+      </mesh>
+      <mesh position={[0, 0.72, 0.255]}>
+        <planeGeometry args={[0.28, 0.06]} />
         <meshStandardMaterial
           color="#FAFAFA"
-          metalness={0.3}
-          roughness={0.5}
+          metalness={0.4}
+          roughness={0.4}
           transparent
-          opacity={0.15}
+          opacity={0.85}
         />
       </mesh>
+
+      {/* Dip tube */}
+      <mesh
+        ref={tubeRef}
+        position={[0.04, 0.72, 0]}
+        rotation={[0, 0, 0.03]}
+        material={tubeMat}
+      >
+        <cylinderGeometry args={[0.012, 0.016, 1.15, 10]} />
+      </mesh>
+
+      {/* Fixed neck + pump */}
+      <group position={[0, 1.38, 0]}>
+        <mesh position={[0, 0.04, 0]} material={goldMat}>
+          <cylinderGeometry args={[0.14, 0.18, 0.1, 32]} />
+        </mesh>
+
+        <group ref={atomizerRef} position={[0, 0.12, 0]}>
+          <mesh material={pumpMat}>
+            <cylinderGeometry args={[0.09, 0.11, 0.08, 24]} />
+          </mesh>
+          <mesh position={[0, 0.06, 0]}>
+            <cylinderGeometry args={[0.04, 0.05, 0.05, 16]} />
+            <meshStandardMaterial color="#d4cfc4" metalness={0.98} roughness={0.06} />
+          </mesh>
+        </group>
+      </group>
+
+      {/* Ornate cap — lifts off */}
+      <group ref={capRef} position={[0, 1.58, 0]}>
+        <mesh material={goldMat}>
+          <cylinderGeometry args={[0.2, 0.22, 0.22, 32]} />
+        </mesh>
+        <mesh position={[0, 0.16, 0]} material={goldMat}>
+          <sphereGeometry
+            args={[0.2, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]}
+          />
+        </mesh>
+        <mesh position={[0, 0.32, 0]} material={goldMat}>
+          <sphereGeometry args={[0.06, 16, 16]} />
+        </mesh>
+      </group>
     </group>
   );
 }

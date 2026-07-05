@@ -67,6 +67,8 @@ body {
   font-weight: 300;
   line-height: 0.92;
   letter-spacing: -0.025em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 .glass-panel {
@@ -148,7 +150,7 @@ body {
       rgba(4, 31, 22, 0.15) 72%,
       rgba(4, 31, 22, 0.55) 100%
     ),
-    linear-gradient(to bottom, rgba(4, 31, 22, 0.2) 0%, transparent 14%, transparent 80%, rgba(4, 31, 22, 0.45) 100%);
+    linear-gradient(to bottom, rgba(4, 31, 22, 0.12) 0%, transparent 10%, transparent 82%, rgba(4, 31, 22, 0.45) 100%);
 }
 
 .canvas-glow {
@@ -190,13 +192,223 @@ body {
   );
 }
 
+.section-bg {
+  background: linear-gradient(
+    180deg,
+    rgba(4, 31, 22, 0.85) 0%,
+    rgba(6, 42, 30, 0.95) 8%,
+    #041f16 100%
+  );
+  backdrop-filter: blur(8px);
+}
+
+.atmosphere-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.atmosphere-warmth {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 45%,
+    rgba(216, 198, 106, 0.12) 0%,
+    transparent 65%
+  );
+  transition: opacity 0.8s ease;
+}
+
+.atmosphere-spread {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 100% 80% at 50% 40%,
+    rgba(184, 154, 62, 0.08) 0%,
+    transparent 70%
+  );
+  animation: spread-pulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes spread-pulse {
+  from { transform: scale(1); opacity: 0.5; }
+  to { transform: scale(1.05); opacity: 0.8; }
+}
+
+.atmosphere-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(216, 198, 106, 0.5);
+  animation: particle-float linear infinite;
+  box-shadow: 0 0 6px rgba(216, 198, 106, 0.4);
+}
+
+@keyframes particle-float {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-80px) translateX(20px); opacity: 0; }
+}
+
+.cursor-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  margin: -200px 0 0 -200px;
+  background: radial-gradient(circle, rgba(216, 198, 106, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 45;
+  mix-blend-mode: screen;
+}
+
+.contact-video-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(4, 31, 22, 0.92) 0%,
+    rgba(6, 42, 30, 0.75) 40%,
+    rgba(4, 31, 22, 0.88) 100%
+  );
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(216, 198, 106, 0.5), transparent);
+  animation: scroll-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.15); }
+}
+
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(to right, #b89a3e, #d8c66a);
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+.texture-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+
 @media (max-width: 767px) {
   .headline-xl {
-    letter-spacing: -0.015em;
+    letter-spacing: -0.012em;
+    line-height: 1.02;
+  }
+
+  .section-label {
+    letter-spacing: 0.28em;
+    font-size: 0.6rem;
   }
 
   .canvas-glow {
-    width: 320px;
-    height: 320px;
+    width: min(280px, 75vw);
+    height: min(280px, 75vw);
+    top: 42%;
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .canvas-glow {
+    width: min(400px, 60vw);
+    height: min(400px, 60vw);
+  }
+}
+
+@media (min-width: 1024px) {
+  .canvas-glow {
+    width: min(520px, 50vw);
+    height: min(520px, 50vw);
+  }
+}
+
+/* Safe areas for notched phones */
+.safe-top {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}
+
+/* Section container */
+.section-container {
+  width: 100%;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 4vw, 3rem);
+  padding-right: clamp(1rem, 4vw, 3rem);
+}
+
+/* Responsive section spacing */
+.section-pad {
+  padding-top: clamp(4rem, 10vw, 11rem);
+  padding-bottom: clamp(4rem, 10vw, 11rem);
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  .link-underline {
+    padding-block: 0.25rem;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
+}
+
+/* Landscape phones — tighter hero rhythm */
+@media (max-height: 500px) and (orientation: landscape) {
+  .headline-xl {
+    font-size: clamp(1.5rem, 5vw, 2.25rem) !important;
+    line-height: 1.05 !important;
+  }
+
+  .section-pad {
+    padding-top: clamp(3rem, 8vw, 6rem);
+    padding-bottom: clamp(3rem, 8vw, 6rem);
+  }
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-fog,
+  .atmosphere-spread,
+  .atmosphere-particle,
+  .scroll-line {
+    animation: none !important;
+  }
+
+  .canvas-container {
+    transition: none;
   }
 }

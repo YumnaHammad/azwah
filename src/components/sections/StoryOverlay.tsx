@@ -2,59 +2,83 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useSceneState } from "@/components/providers/SceneProvider";
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 
 const STORY_BEATS = {
   intro: {
     label: "Azwah Enterprises",
-    title: ["Crafted.", "Pure."],
-    body: "The art of fragrance, distilled into silence.",
+    title: ["Where silence", "becomes scent."],
+    body: "An invitation to experience fragrance as art — composed, not manufactured.",
+  },
+  glow: {
+    label: "The Awakening",
+    title: ["A whisper of", "gold appears."],
+    body: "Light gathers. The bottle breathes. Something extraordinary is about to unfold.",
   },
   reveal: {
-    label: "The Essence",
-    title: ["Every drop", "tells a story"],
-    body: "Rare ingredients from distant lands, waiting to be revealed.",
+    label: "The Approach",
+    title: ["Draw closer to", "pure essence."],
+    body: "Every facet of glass catches the light — a prelude to revelation.",
   },
-  open: {
+  unlock: {
     label: "The Ritual",
-    title: ["Uncork the", "secret within"],
-    body: "The cap releases. Anticipation becomes revelation.",
+    title: ["The cap", "unlocks."],
+    body: "Polished metal turns. A centuries-old gesture of anticipation.",
+  },
+  lift: {
+    label: "The Revelation",
+    title: ["The sacred", "tube emerges."],
+    body: "Through crystal clarity, the dip tube rises — the heart of the fragrance revealed.",
+  },
+  escape: {
+    label: "First Breath",
+    title: ["Golden mist", "escapes."],
+    body: "The faintest trace of oud and amber drifts into the air. Elegant. Never loud.",
   },
   spray: {
     label: "The Release",
-    title: ["A golden mist", "takes flight"],
-    body: "Soft, elegant, flowing — never loud. Pure luxury in motion.",
+    title: ["Press.", "Inhale."],
+    body: "Atomizer depresses. A veil of golden particles flows — you can almost smell it.",
   },
-  transform: {
-    label: "The Experience",
-    title: ["Let fragrance", "transform you"],
-    body: "Oud, amber, and rose envelop the air. The world grows golden.",
+  spread: {
+    label: "Transformation",
+    title: ["Fragrance fills", "the world."],
+    body: "The atmosphere warms. Light turns gold. Everything begins to glow.",
   },
   exit: {
-    label: "Timeless",
-    title: ["The bottle fades.", "The essence remains."],
-    body: "What lingers is not the vessel — but the memory of luxury.",
+    label: "The Legacy",
+    title: ["The vessel fades.", "Essence remains."],
+    body: "What lingers is memory — timeless, intimate, unforgettable.",
   },
 } as const;
 
 export function StoryOverlay() {
-  const { phase, progress } = useSceneState();
+  const { phase, progress, fragranceSpread, environmentWarmth } = useSceneState();
+  const bp = useBreakpoint();
   const beat = STORY_BEATS[phase];
+  const textGlow = fragranceSpread * 0.5 + environmentWarmth * 0.3;
+  const isMobile = bp === "mobile";
 
   return (
-    <div className="absolute inset-0 pointer-events-none">
-      {/* Top headline — keeps center clear for bottle */}
-      <div className="absolute top-24 md:top-28 left-0 right-0 px-6 md:px-16">
+    <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
+      {/* Headline — top on all sizes; leaves center for bottle */}
+      <div className="shrink-0 pt-[max(5rem,calc(env(safe-area-inset-top)+3.25rem))] sm:pt-24 md:pt-28 px-4 sm:px-6 md:px-12 lg:px-20 max-w-4xl">
         <AnimatePresence mode="wait">
           <motion.div
             key={phase}
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-            className="max-w-3xl"
+            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -12, filter: "blur(4px)" }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              textShadow:
+                textGlow > 0.1
+                  ? `0 0 ${16 + textGlow * 32}px rgba(216, 198, 106, ${textGlow * 0.28})`
+                  : "none",
+            }}
           >
-            <p className="section-label mb-4 md:mb-5">{beat.label}</p>
-            <h2 className="headline-xl text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-cream">
+            <p className="section-label mb-2 sm:mb-3 md:mb-4">{beat.label}</p>
+            <h2 className="headline-xl text-[1.75rem] leading-[1.05] xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-cream">
               {beat.title[0]}
               <br />
               <span className="text-gradient-gold">{beat.title[1]}</span>
@@ -63,32 +87,36 @@ export function StoryOverlay() {
         </AnimatePresence>
       </div>
 
-      {/* Bottom caption */}
-      <div className="absolute bottom-28 md:bottom-32 left-0 right-0 px-6 md:px-16">
+      {/* Spacer — bottle lives here visually */}
+      <div className="flex-1 min-h-[28vh] sm:min-h-[32vh] md:min-h-[36vh]" aria-hidden="true" />
+
+      {/* Body copy — bottom, above mobile progress bar */}
+      <div className="shrink-0 px-4 sm:px-6 md:px-12 lg:px-20 pb-[max(6rem,calc(env(safe-area-inset-bottom)+4.5rem))] sm:pb-28 md:pb-32 max-w-lg">
         <AnimatePresence mode="wait">
           <motion.p
             key={`${phase}-body`}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="max-w-md text-cream/45 text-sm md:text-base leading-relaxed font-light"
+            transition={{ duration: 0.65, delay: 0.1 }}
+            className="text-cream/50 text-xs sm:text-sm md:text-base leading-relaxed font-light tracking-wide"
           >
-            {beat.body}
+            {isMobile && beat.body.length > 90
+              ? beat.body.split(".")[0] + "."
+              : beat.body}
           </motion.p>
         </AnimatePresence>
       </div>
 
-      {/* Scroll hint — fades after intro */}
+      {/* Scroll hint — desktop/tablet only (mobile uses progress bar) */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
-        animate={{ opacity: progress < 0.12 ? 0.5 : 0 }}
-        transition={{ duration: 0.6 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
+        animate={{ opacity: progress < 0.1 ? 0.5 : 0 }}
       >
-        <span className="text-[10px] tracking-[0.35em] uppercase text-cream/50">
-          Scroll to reveal
+        <span className="text-[9px] sm:text-[10px] tracking-[0.35em] uppercase text-cream/40">
+          Scroll to begin
         </span>
-        <div className="w-px h-10 bg-gradient-to-b from-gold/50 to-transparent" />
+        <div className="scroll-line" />
       </motion.div>
     </div>
   );

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -21,6 +21,14 @@ export const metadata: Metadata = {
   description:
     "Experience the essence of luxury. Azwah Enterprises crafts timeless fragrances with the finest oud, amber, rose, and sandalwood.",
   keywords: ["luxury perfume", "Azwah", "fragrance", "oud", "premium scent"],
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#041f16",
 };
 
 export default function RootLayout({

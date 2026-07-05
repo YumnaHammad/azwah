@@ -54,7 +54,13 @@ export function MagneticButton({
 
   if (href) {
     return (
-      <motion.a ref={ref as React.RefObject<HTMLAnchorElement>} href={href} className={sharedClasses} {...motionProps}>
+      <motion.a
+        ref={ref as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        onClick={onClick}
+        className={sharedClasses}
+        {...motionProps}
+      >
         {shimmer}
         <span className="relative z-10">{children}</span>
       </motion.a>

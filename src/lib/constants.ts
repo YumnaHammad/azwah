@@ -6,39 +6,48 @@ export const COLORS = {
   cream: "#FAFAFA",
 } as const;
 
-export const SCROLL_SCENES = {
-  hero: { start: 0, end: 0.2 },
-  closeUp: { start: 0.2, end: 0.4 },
-  capOpen: { start: 0.4, end: 0.6 },
-  spray: { start: 0.6, end: 0.8 },
-  transform: { start: 0.8, end: 1.0 },
-} as const;
-
 export const INGREDIENTS = [
   {
     name: "Oud",
-    description: "Rare resinous heartwood, deep and mystical.",
-    icon: "🌲",
-  },
-  {
-    name: "Amber",
-    description: "Warm golden resin, sensual and enveloping.",
-    icon: "✦",
-  },
-  {
-    name: "Rose",
-    description: "Damask petals, velvety and romantic.",
-    icon: "❀",
-  },
-  {
-    name: "Sandalwood",
-    description: "Creamy wood notes, smooth and meditative.",
+    origin: "Assam",
+    description:
+      "Aged heartwood resin — smoky, sacred, and impossibly deep.",
     icon: "◈",
   },
   {
-    name: "Musk",
-    description: "Soft animalic warmth, intimate and lasting.",
+    name: "Rose",
+    origin: "Grasse",
+    description:
+      "Hand-picked damask petals, distilled at dawn for velvety warmth.",
+    icon: "❀",
+  },
+  {
+    name: "Amber",
+    origin: "Baltic",
+    description:
+      "Sun-hardened resin that glows on skin like liquid gold.",
+    icon: "✦",
+  },
+  {
+    name: "Sandalwood",
+    origin: "Mysore",
+    description:
+      "Creamy, meditative wood — the silent backbone of every composition.",
     icon: "◎",
+  },
+  {
+    name: "White Musk",
+    origin: "Alpine",
+    description:
+      "Clean, intimate warmth that lingers like a whispered secret.",
+    icon: "◇",
+  },
+  {
+    name: "Saffron",
+    origin: "Kashmir",
+    description:
+      "Precious crimson threads — leathery, luminous, unforgettable.",
+    icon: "✧",
   },
 ] as const;
 
@@ -46,50 +55,39 @@ export const PRODUCTS = [
   {
     name: "Azwah Noir",
     subtitle: "Eau de Parfum",
-    notes: "Oud · Amber · Musk",
+    notes: "Oud · Amber · White Musk",
+    description: "Midnight elegance bottled. Bold, smoky, eternal.",
     price: "$285",
   },
   {
     name: "Azwah Rose",
     subtitle: "Eau de Parfum",
-    notes: "Rose · Sandalwood · Amber",
+    notes: "Rose · Sandalwood · Saffron",
+    description: "Velvet petals meet golden spice. Romantic and refined.",
     price: "$265",
   },
   {
     name: "Azwah Gold",
     subtitle: "Parfum Extrême",
-    notes: "Oud · Rose · Saffron",
+    notes: "Oud · Rose · Amber",
+    description: "Our rarest expression. Heirloom luxury in every drop.",
     price: "$395",
   },
 ] as const;
 
-export const FEATURES = [
-  {
-    title: "Artisan Crafted",
-    description: "Each bottle hand-finished by master perfumers in Grasse.",
-    icon: "✧",
-  },
-  {
-    title: "Rare Ingredients",
-    description: "Sourced from the finest regions across the world.",
-    icon: "◆",
-  },
-  {
-    title: "Lasting Presence",
-    description: "Formulations designed to evolve gracefully on skin.",
-    icon: "∞",
-  },
-  {
-    title: "Timeless Design",
-    description: "Elegant vessels that become heirlooms.",
-    icon: "◇",
-  },
-] as const;
+export const CONTACT = {
+  address: "47 Avenue Montaigne, Paris 75008",
+  phone: "+33 1 42 86 00 00",
+  email: "concierge@azwah.com",
+  hours: "Mon – Sat · 10:00 – 20:00",
+  whatsapp: "https://wa.me/33142860000",
+  maps: "https://maps.google.com/?q=47+Avenue+Montaigne+Paris",
+} as const;
 
-export const HEADLINES = [
-  "Crafted.",
-  "Pure.",
-  "Luxury.",
-  "Timeless.",
-  "Essence.",
-] as const;
+export const BRAND = {
+  tagline: "Where heritage meets the sublime.",
+  story:
+    "Our fragrances are inspired by timeless traditions, crafted with rare ingredients sourced across continents, and designed to leave unforgettable memories on skin and in spirit.",
+  heritage:
+    "Founded on the belief that true luxury is felt — not announced — Azwah Enterprises composes scents for those who understand that elegance is eternal.",
+} as const;

@@ -4,35 +4,50 @@ import dynamic from "next/dynamic";
 import { SceneProvider, useSceneState } from "@/components/providers/SceneProvider";
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { useScrollTimeline } from "@/hooks/useScrollTimeline";
-import { useIsMobile } from "@/hooks/useIsMobile";
+import {
+  useBreakpoint,
+  getScrollHeight,
+  getContentThreshold,
+} from "@/hooks/useBreakpoint";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { StoryOverlay, HeroIntro } from "@/components/sections/StoryOverlay";
 import { ProductsSection } from "@/components/sections/ProductsSection";
 import { IngredientsSection } from "@/components/sections/IngredientsSection";
-import { WhySection } from "@/components/sections/WhySection";
-import { CTASection } from "@/components/sections/CTASection";
+import { AboutSection } from "@/components/sections/AboutSection";
+import { ContactSection } from "@/components/sections/ContactSection";
 import { ScrollChapters } from "@/components/ui/ScrollChapters";
+import { MobileScrollProgress } from "@/components/ui/MobileScrollProgress";
+import { AtmosphereOverlay } from "@/components/ui/AtmosphereOverlay";
+import { CursorSpotlight } from "@/components/ui/CursorSpotlight";
 import { MobileHeroVisual } from "@/components/mobile/MobileHeroVisual";
 
 const SceneCanvas = dynamic(
-  () =>
-    import("@/components/three/SceneCanvas").then((mod) => mod.SceneCanvas),
+  () => import("@/components/three/SceneCanvas").then((m) => m.SceneCanvas),
   { ssr: false }
 );
 
 function ScrollStory() {
   const scrollRef = useScrollTimeline();
-  const { progress } = useSceneState();
+  const { progress, fragranceSpread } = useSceneState();
+  const bp = useBreakpoint();
 
   return (
-    <div ref={scrollRef} className="relative h-[600vh]">
-      <div className="sticky top-0 h-screen overflow-hidden">
+    <div
+      ref={scrollRef}
+      className="relative"
+      style={{ height: getScrollHeight(bp) }}
+    >
+      <div className="sticky top-0 h-[100dvh] min-h-screen overflow-hidden">
         <HeroIntro />
         <StoryOverlay />
+        <AtmosphereOverlay />
         <div
-          className="absolute inset-0 bg-primary-dark/20 transition-opacity duration-700 pointer-events-none"
-          style={{ opacity: Math.max(0, (progress - 0.85) * 4) }}
+          className="absolute inset-0 pointer-events-none transition-all duration-1000"
+          style={{
+            background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(216,198,106,${fragranceSpread * 0.08}) 0%, transparent 70%)`,
+            opacity: Math.max(0, (progress - 0.82) * 3),
+          }}
         />
       </div>
     </div>
@@ -40,29 +55,31 @@ function ScrollStory() {
 }
 
 function BackgroundLayer() {
-  const isMobile = useIsMobile();
-  if (isMobile) return <MobileHeroVisual />;
-  return <SceneCanvas />;
+  const bp = useBreakpoint();
+  if (bp === "mobile") return <MobileHeroVisual />;
+  return <SceneCanvas compact={bp === "tablet"} />;
 }
 
 function ContentSections() {
   const { progress } = useSceneState();
-  const visible = progress > 0.82;
+  const bp = useBreakpoint();
+  const threshold = getContentThreshold(bp);
+  const visible = progress > threshold;
 
   return (
     <div
-      className="content-layer relative z-20 transition-all duration-1000"
+      className="content-layer relative z-20 transition-all duration-700"
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(40px)",
+        transform: visible ? "translateY(0)" : "translateY(32px)",
         pointerEvents: visible ? "auto" : "none",
       }}
     >
-      <div className="bg-gradient-to-b from-transparent via-primary-dark/95 to-primary-dark backdrop-blur-sm">
+      <div className="section-bg">
         <ProductsSection />
         <IngredientsSection />
-        <WhySection />
-        <CTASection />
+        <AboutSection />
+        <ContactSection />
         <Footer />
       </div>
     </div>
@@ -73,10 +90,12 @@ export default function HomePage() {
   return (
     <SceneProvider>
       <SmoothScrollProvider>
-        <main className="relative min-h-screen">
+        <main className="relative min-h-screen overflow-x-hidden">
           <BackgroundLayer />
+          <CursorSpotlight />
           <Navigation />
           <ScrollChapters />
+          <MobileScrollProgress />
           <ScrollStory />
           <ContentSections />
         </main>
