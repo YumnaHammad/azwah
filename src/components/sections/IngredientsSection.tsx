@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
-import { INGREDIENTS } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -86,6 +86,7 @@ function IngredientPanel({
 export function IngredientsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
+  const { site } = useSiteContent();
 
   useEffect(() => {
     const title = titleRef.current;
@@ -118,7 +119,7 @@ export function IngredientsSection() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {INGREDIENTS.map((ing, i) => (
+          {site.ingredients.map((ing, i) => (
             <IngredientPanel key={ing.name} {...ing} index={i} />
           ))}
         </div>

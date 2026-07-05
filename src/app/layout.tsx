@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
+import { SiteBannersRoot } from "@/components/banners/SiteBannersRoot";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -21,6 +22,10 @@ export const metadata: Metadata = {
   description:
     "Experience the essence of luxury. Azwah Enterprises crafts timeless fragrances with the finest oud, amber, rose, and sandalwood.",
   keywords: ["luxury perfume", "Azwah", "fragrance", "oud", "premium scent"],
+  icons: {
+    icon: "/fav.png",
+    apple: "/fav.png",
+  },
 };
 
 export const viewport: Viewport = {
@@ -38,7 +43,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <SiteBannersRoot />
+        {children}
+      </body>
     </html>
   );
 }

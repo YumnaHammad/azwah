@@ -4,19 +4,20 @@ import Link from "next/link";
 import { PageShell, Breadcrumb } from "@/components/layout/PageShell";
 import { ProductDetailClient } from "@/components/products/ProductDetailClient";
 import { ProductCard } from "@/components/products/ProductCard";
-import { getProductBySlug, getRelatedProducts, PRODUCTS } from "@/lib/products";
+import { getProductBySlug, getRelatedProducts, getProducts } from "@/lib/products";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
+  const products = await getProducts();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
   return {
     title: `${product.name} | ${product.brand} — Azwah Enterprises`,
@@ -26,17 +27,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = getRelatedProducts(product);
+  const related = await getRelatedProducts(product);
 
   return (
     <PageShell>
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Collection", href: "/#collection" },
+          { label: "Collection", href: "/products" },
           { label: product.name },
         ]}
       />
@@ -61,7 +62,7 @@ export default async function ProductPage({ params }: Props) {
             </div>
             <div className="text-center mt-12">
               <Link
-                href="/#collection"
+                href="/products"
                 className="text-[10px] tracking-[0.3em] uppercase text-cream/40 hover:text-gold-soft transition-colors link-underline"
               >
                 View Full Collection

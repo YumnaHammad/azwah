@@ -5,13 +5,14 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { BRANDS } from "@/lib/brands";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function BrandsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
+  const { site } = useSiteContent();
 
   useEffect(() => {
     const title = titleRef.current;
@@ -43,7 +44,7 @@ export function BrandsSection() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 md:gap-8">
-          {BRANDS.map((brand, i) => (
+          {site.brands.map((brand, i) => (
             <motion.div
               key={brand.id}
               initial={{ opacity: 0, y: 30 }}

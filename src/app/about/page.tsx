@@ -4,8 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { PageShell } from "@/components/layout/PageShell";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { BRAND, CONTACT, INGREDIENTS } from "@/lib/constants";
-import { BRANDS } from "@/lib/brands";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const VALUES = [
   {
@@ -34,6 +33,9 @@ const TIMELINE = [
 ];
 
 export default function AboutPage() {
+  const { site } = useSiteContent();
+  const { brand, contact, ingredients, brands } = site;
+
   return (
     <PageShell>
       {/* Hero */}
@@ -51,10 +53,10 @@ export default function AboutPage() {
             <span className="text-gradient-gold">the sublime.</span>
           </h1>
           <p className="text-cream/50 text-lg md:text-xl font-light leading-relaxed mb-6">
-            {BRAND.story}
+            {brand.story}
           </p>
           <p className="text-cream/35 text-base font-light leading-relaxed max-w-2xl">
-            {BRAND.heritage}
+            {brand.heritage}
           </p>
         </motion.div>
       </section>
@@ -72,10 +74,10 @@ export default function AboutPage() {
               <span className="text-gradient-gold">human touch.</span>
             </h2>
             <p className="text-cream/45 text-base leading-relaxed font-light mb-6">
-              {BRAND.mission}
+              {brand.mission}
             </p>
             <p className="text-cream/35 text-sm leading-relaxed font-light">
-              {BRAND.online}
+              {brand.online}
             </p>
           </div>
           <div className="glass-panel rounded-2xl aspect-[4/3] relative overflow-hidden">
@@ -131,7 +133,7 @@ export default function AboutPage() {
                 <span className="text-gradient-gold">assembled.</span>
               </h2>
               <p className="text-cream/45 text-base leading-relaxed font-light mb-8">
-                {BRAND.ingredientsStory}
+                {brand.ingredientsStory}
               </p>
               <Link
                 href="/#ingredients"
@@ -141,7 +143,7 @@ export default function AboutPage() {
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              {INGREDIENTS.slice(0, 6).map((ing) => (
+              {ingredients.slice(0, 6).map((ing) => (
                 <div
                   key={ing.name}
                   className="glass-panel rounded-xl p-4 sm:p-5 text-center"
@@ -171,21 +173,21 @@ export default function AboutPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-            {BRANDS.map((brand) => (
+            {brands.map((brandItem) => (
               <div
-                key={brand.id}
+                key={brandItem.id}
                 className={`glass-panel rounded-xl p-6 sm:p-8 relative overflow-hidden ${
-                  brand.highlight ? "border border-gold/25 gold-glow" : ""
+                  brandItem.highlight ? "border border-gold/25 gold-glow" : ""
                 }`}
               >
-                {brand.highlight && (
+                {brandItem.highlight && (
                   <span className="absolute top-4 right-4 text-[9px] tracking-[0.2em] uppercase text-gold-soft bg-gold/10 px-2 py-0.5 rounded-full border border-gold/20">
                     Featured
                   </span>
                 )}
-                <p className="section-label mb-2">{brand.tagline}</p>
-                <h3 className="font-serif text-2xl text-cream mb-3">{brand.name}</h3>
-                <p className="text-cream/40 text-sm font-light leading-relaxed">{brand.description}</p>
+                <p className="section-label mb-2">{brandItem.tagline}</p>
+                <h3 className="font-serif text-2xl text-cream mb-3">{brandItem.name}</h3>
+                <p className="text-cream/40 text-sm font-light leading-relaxed">{brandItem.description}</p>
               </div>
             ))}
           </div>
@@ -228,14 +230,14 @@ export default function AboutPage() {
         <div className="section-container text-center">
           <p className="section-label mb-4">Begin Your Journey</p>
           <h2 className="headline-xl text-3xl sm:text-4xl text-cream mb-6">
-            {BRAND.tagline}
+            {brand.tagline}
           </h2>
           <p className="text-cream/40 text-sm max-w-md mx-auto mb-10 font-light">
             Browse the collection, order online, or speak with our concierge for a private consultation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <MagneticButton href="/#collection">Shop Collection</MagneticButton>
-            <MagneticButton href={CONTACT.whatsapp}>WhatsApp Concierge</MagneticButton>
+            <MagneticButton href="/products">Shop Collection</MagneticButton>
+            <MagneticButton href={contact.whatsapp}>WhatsApp Concierge</MagneticButton>
           </div>
         </div>
       </section>

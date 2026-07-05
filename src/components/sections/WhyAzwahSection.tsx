@@ -2,8 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { STATS } from "@/lib/content";
-import { CONTACT } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const PILLARS = [
   {
@@ -29,11 +28,14 @@ const PILLARS = [
 ];
 
 export function WhyAzwahSection() {
+  const { site } = useSiteContent();
+  const { contact, stats } = site;
+
   return (
     <section className="section-pad px-0">
       <div className="section-container">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16">
-          {STATS.map((stat, i) => (
+          {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 20 }}
@@ -81,14 +83,14 @@ export function WhyAzwahSection() {
           <div>
             <p className="section-label mb-2">Ready to order?</p>
             <p className="font-serif text-xl sm:text-2xl text-cream">
-              WhatsApp us at {CONTACT.phone}
+              WhatsApp us at {contact.phone}
             </p>
             <p className="text-cream/40 text-sm mt-2 font-light">
               Men · Women · Unisex · J. Perfume · Gift Sets
             </p>
           </div>
           <Link
-            href={CONTACT.whatsapp}
+            href={contact.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="shrink-0 inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-gold/35 bg-gold/10 text-[10px] tracking-[0.25em] uppercase text-cream hover:bg-gold/20 hover:border-gold/55 transition-all"

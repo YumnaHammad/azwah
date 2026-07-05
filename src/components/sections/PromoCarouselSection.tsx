@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { LuxuryCarousel } from "@/components/ui/LuxuryCarousel";
-import { HIGHLIGHTS } from "@/lib/content";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const ACCENT_BG = {
   gold: "from-[#2a2008]/80 via-primary-dark to-[#041a12]",
@@ -12,11 +12,13 @@ const ACCENT_BG = {
 } as const;
 
 export function PromoCarouselSection() {
+  const { site } = useSiteContent();
+
   return (
     <section className="py-8 sm:py-12 px-0 border-y border-gold/10 bg-[#041a12]/60">
       <div className="section-container">
         <LuxuryCarousel autoPlayMs={2000} showArrows={false}>
-          {HIGHLIGHTS.map((slide) => (
+          {site.highlights.map((slide) => (
             <div
               key={slide.id}
               className={`luxury-card rounded-2xl p-8 sm:p-10 md:p-12 bg-gradient-to-br ${ACCENT_BG[slide.accent]}`}

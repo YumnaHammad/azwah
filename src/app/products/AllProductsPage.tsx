@@ -6,25 +6,27 @@ import Link from "next/link";
 import { PageShell, Breadcrumb } from "@/components/layout/PageShell";
 import { ProductFilterBar } from "@/components/products/ProductFilterBar";
 import { ProductCard } from "@/components/products/ProductCard";
-import { PRODUCTS } from "@/lib/products";
+import { useProducts } from "@/hooks/useProducts";
+import { useSiteContent } from "@/hooks/useSiteContent";
 import { isValidCategory } from "@/lib/product-filters";
-import type { CategoryFilter } from "@/types/product";
+import type { CategoryFilter, Product } from "@/types/product";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { CONTACT } from "@/lib/constants";
 
-function filterProducts(category: CategoryFilter) {
-  if (category === "all") return PRODUCTS;
-  return PRODUCTS.filter((p) => p.category === category);
+function filterProducts(products: Product[], category: CategoryFilter) {
+  if (category === "all") return products;
+  return products.filter((p) => p.category === category);
 }
 
 function AllProductsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { products, loading } = useProducts();
+  const { site } = useSiteContent();
 
   const categoryParam = searchParams.get("category");
   const filter: CategoryFilter = isValidCategory(categoryParam) ? categoryParam : "all";
 
-  const filtered = useMemo(() => filterProducts(filter), [filter]);
+  const filtered = useMemo(() => filterProducts(products, filter), [products, filter]);
 
   const setFilter = (next: CategoryFilter) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -60,26 +62,32 @@ function AllProductsContent() {
           </p>
         </div>
 
-        <ProductFilterBar
-          value={filter}
-          onChange={setFilter}
-          count={filtered.length}
-          total={PRODUCTS.length}
-          sticky
-        />
+        {loading ? (
+          <p className="text-center text-cream/40 py-16">Loading collection…</p>
+        ) : (
+          <>
+            <ProductFilterBar
+              value={filter}
+              onChange={setFilter}
+              count={filtered.length}
+              total={products.length}
+              sticky
+            />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 mt-8 sm:mt-10">
-          {filtered.map((product, i) => (
-            <ProductCard key={product.slug} product={product} index={i} />
-          ))}
-        </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 mt-8 sm:mt-10">
+              {filtered.map((product, i) => (
+                <ProductCard key={product.slug} product={product} index={i} />
+              ))}
+            </div>
 
-        {filtered.length === 0 && (
-          <p className="text-center text-cream/40 py-16">No products in this category.</p>
+            {filtered.length === 0 && (
+              <p className="text-center text-cream/40 py-16">No products in this category.</p>
+            )}
+          </>
         )}
 
         <div className="mt-14 sm:mt-16 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <MagneticButton href={CONTACT.whatsapp}>Order via WhatsApp</MagneticButton>
+          <MagneticButton href={site.contact.whatsapp}>Order via WhatsApp</MagneticButton>
           <Link
             href="/"
             className="text-[10px] tracking-[0.3em] uppercase text-cream/35 hover:text-gold-soft transition-colors link-underline"

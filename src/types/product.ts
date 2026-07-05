@@ -12,12 +12,14 @@ export interface ProductImage {
   alt: string;
   variant: "bottle" | "detail" | "box" | "lifestyle";
   accent: "noir" | "rose" | "gold" | "oud" | "jade" | "ivory" | "amber";
+  /** Uploaded image URL e.g. /uploads/photo.jpg */
+  url?: string;
 }
 
 export interface Product {
   slug: string;
   name: string;
-  brand: ProductBrand;
+  brand: string;
   category: ProductCategory;
   subtitle: string;
   notes: string;

@@ -15,7 +15,7 @@ export function Navigation() {
       initial={{ opacity: 0, y: -16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, delay: 0.3 }}
-      className="nav-glass fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 md:px-10 lg:px-12 py-4 sm:py-5 md:py-6 flex items-center justify-between safe-top"
+      className="nav-glass fixed top-[var(--site-top-banner,0px)] left-0 right-0 z-[60] px-4 sm:px-6 md:px-10 lg:px-12 py-4 sm:py-5 md:py-6 flex items-center justify-between safe-top transition-[top] duration-300"
     >
       <Link href="/" className="flex items-baseline gap-1.5 sm:gap-2 min-w-0">
         <span className="font-serif text-base sm:text-lg md:text-xl text-cream tracking-[0.15em] sm:tracking-[0.2em] uppercase truncate">

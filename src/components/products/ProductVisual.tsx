@@ -60,6 +60,19 @@ export function ProductVisual({ image, className = "", size = "md", embedded = f
   const bottleScale =
     size === "sm" ? "w-[52px] h-[120px]" : size === "lg" ? "w-[100px] h-[220px]" : "w-[72px] h-[168px]";
 
+  if (image.url) {
+    return (
+      <div className={`relative w-full h-full overflow-hidden ${className}`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={image.url}
+          alt={image.alt}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </div>
+    );
+  }
+
   if (image.variant === "box") {
     return (
       <div className={`relative w-full h-full flex items-center justify-center ${className}`}>

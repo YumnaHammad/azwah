@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion";
 import { LuxuryCarousel } from "@/components/ui/LuxuryCarousel";
-import { TESTIMONIALS } from "@/lib/content";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 export function TestimonialsSection() {
+  const { site } = useSiteContent();
+
   return (
     <section className="section-pad px-0 bg-[#041a12]/50 border-y border-gold/5">
       <div className="section-container">
@@ -22,7 +24,7 @@ export function TestimonialsSection() {
         </motion.div>
 
         <LuxuryCarousel autoPlayMs={2000}>
-          {TESTIMONIALS.map((t) => (
+          {site.testimonials.map((t) => (
             <div
               key={t.id}
               className="glass-panel rounded-2xl p-8 sm:p-10 md:p-12 text-center max-w-3xl mx-auto"

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { BRAND } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const NAV = [
   { label: "Collection", href: "/products" },
@@ -16,6 +16,7 @@ const SOCIAL = ["Instagram", "Pinterest", "LinkedIn"];
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const { site } = useSiteContent();
 
   return (
     <footer className="relative pt-16 sm:pt-20 pb-8 sm:pb-10 px-0 overflow-hidden safe-bottom">
@@ -36,7 +37,7 @@ export function Footer() {
             Azwah
           </p>
           <p className="text-cream/35 text-sm leading-relaxed font-light max-w-xs">
-            {BRAND.tagline} Composing fragrances for the discerning few since our founding.
+            {site.brand.tagline} Composing fragrances for the discerning few since our founding.
           </p>
         </div>
 

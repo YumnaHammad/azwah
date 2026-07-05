@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import type { Product, ProductImage } from "@/types/product";
-import { CONTACT } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 import { ProductVisual } from "./ProductVisual";
 
 export function ProductGallery({ images }: { images: ProductImage[] }) {
@@ -51,6 +51,8 @@ interface ProductDetailClientProps {
 
 export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const [selectedSize, setSelectedSize] = useState(0);
+  const { site } = useSiteContent();
+  const { contact } = site;
   const size = product.sizes[selectedSize];
 
   return (
@@ -159,7 +161,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
         <div className="flex flex-col sm:flex-row gap-3">
           <a
-            href={`${CONTACT.whatsapp}?text=${encodeURIComponent(`Hello, I would like to order ${product.name} (${size.label}) — $${size.price}`)}`}
+            href={`${contact.whatsapp}?text=${encodeURIComponent(`Hello, I would like to order ${product.name} (${size.label}) — $${size.price}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 inline-flex items-center justify-center px-8 py-4 rounded-full border border-gold/40 bg-gold/10 text-cream text-[11px] tracking-[0.25em] uppercase hover:bg-gold/20 hover:border-gold/60 transition-all"
@@ -167,7 +169,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
             Order via WhatsApp
           </a>
           <a
-            href="mailto:concierge@azwah.com"
+            href={`mailto:${contact.email}`}
             className="flex-1 inline-flex items-center justify-center px-8 py-4 rounded-full border border-white/15 text-cream/70 text-[11px] tracking-[0.25em] uppercase hover:border-gold/30 hover:text-gold-soft transition-all"
           >
             Concierge Inquiry

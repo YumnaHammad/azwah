@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { BRAND } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +13,8 @@ export function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
+  const { site } = useSiteContent();
+  const { brand } = site;
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -53,10 +55,10 @@ export function AboutSection() {
               <span className="text-gradient-gold">Own ingredients.</span>
             </h2>
             <p className="text-cream/50 text-base md:text-lg leading-relaxed font-light mb-6">
-              {BRAND.story}
+              {brand.story}
             </p>
             <p className="text-cream/35 text-sm md:text-base leading-relaxed font-light mb-8">
-              {BRAND.mission}
+              {brand.mission}
             </p>
             <Link
               href="/about"
@@ -67,7 +69,7 @@ export function AboutSection() {
             <div className="mt-10 flex items-center gap-6">
               <span className="text-gold text-3xl font-serif">✦</span>
               <p className="text-cream/40 text-xs tracking-[0.3em] uppercase italic font-serif">
-                {BRAND.tagline}
+                {brand.tagline}
               </p>
             </div>
           </div>

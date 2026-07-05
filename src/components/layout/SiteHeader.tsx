@@ -19,7 +19,7 @@ export function SiteHeader({ variant = "solid" }: { variant?: "solid" | "transpa
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 md:px-10 lg:px-12 py-4 sm:py-5 flex items-center justify-between safe-top ${
+      className={`fixed top-[var(--site-top-banner,0px)] left-0 right-0 z-[60] px-4 sm:px-6 md:px-10 lg:px-12 py-4 sm:py-5 flex items-center justify-between safe-top transition-[top] duration-300 ${
         variant === "solid"
           ? "bg-primary-dark/95 backdrop-blur-md border-b border-gold/10"
           : "nav-glass"

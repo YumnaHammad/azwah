@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion } from "framer-motion";
-import { CONTACT } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -33,6 +33,7 @@ const SERVICES = [
 
 export function ServicesSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const { site } = useSiteContent();
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -75,7 +76,7 @@ export function ServicesSection() {
 
         <div className="text-center mt-12">
           <a
-            href={CONTACT.whatsapp}
+            href={site.contact.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center justify-center px-8 py-3.5 rounded-full border border-gold/30 text-[10px] tracking-[0.25em] uppercase text-cream/70 hover:bg-gold/10 hover:border-gold/50 hover:text-gold-soft transition-all"

@@ -30,6 +30,12 @@ yarn-error.log*
 # env files
 .env*.local
 
+# cms data & uploads (seeded on first run)
+/data/*.json
+/public/uploads/*
+!/public/uploads/.gitkeep
+!/data/.gitkeep
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

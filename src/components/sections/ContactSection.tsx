@@ -4,7 +4,7 @@ import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useBoutiqueScroll } from "@/hooks/useBoutiqueScroll";
-import { CONTACT } from "@/lib/constants";
+import { useSiteContent } from "@/hooks/useSiteContent";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,6 +12,8 @@ gsap.registerPlugin(ScrollTrigger);
 export function ContactSection() {
   const sectionRef = useBoutiqueScroll();
   const contentRef = useRef<HTMLDivElement>(null);
+  const { site } = useSiteContent();
+  const { contact } = site;
 
   useEffect(() => {
     const content = contentRef.current;
@@ -28,10 +30,10 @@ export function ContactSection() {
   }, []);
 
   const items = [
-    { label: "Address", value: CONTACT.address },
-    { label: "Telephone", value: CONTACT.phone },
-    { label: "Concierge", value: CONTACT.email },
-    { label: "Hours", value: CONTACT.hours },
+    { label: "Address", value: contact.address },
+    { label: "Telephone", value: contact.phone },
+    { label: "Concierge", value: contact.email },
+    { label: "Hours", value: contact.hours },
   ];
 
   return (
@@ -55,10 +57,10 @@ export function ContactSection() {
             including J. Perfume — shipped with gift wrapping and concierge support.
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
-            <MagneticButton href={CONTACT.maps} className="w-full sm:w-auto justify-center">
+            <MagneticButton href={contact.maps} className="w-full sm:w-auto justify-center">
               Google Maps
             </MagneticButton>
-            <MagneticButton href={CONTACT.whatsapp} className="w-full sm:w-auto justify-center">
+            <MagneticButton href={contact.whatsapp} className="w-full sm:w-auto justify-center">
               WhatsApp
             </MagneticButton>
           </div>
