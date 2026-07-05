@@ -58,9 +58,13 @@ export function StoryOverlay() {
   const beat = STORY_BEATS[phase];
   const textGlow = fragranceSpread * 0.5 + environmentWarmth * 0.3;
   const isMobile = bp === "mobile";
+  const storyFade = progress > 0.74 ? Math.max(0, 1 - (progress - 0.74) * 4) : 1;
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
+    <div
+      className="absolute inset-0 pointer-events-none z-10 flex flex-col transition-opacity duration-500"
+      style={{ opacity: storyFade }}
+    >
       {/* Headline — top on all sizes; leaves center for bottle */}
       <div className="shrink-0 pt-[max(5rem,calc(env(safe-area-inset-top)+3.25rem))] sm:pt-24 md:pt-28 px-4 sm:px-6 md:px-12 lg:px-20 max-w-4xl">
         <AnimatePresence mode="wait">

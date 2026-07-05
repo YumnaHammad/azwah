@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const LINKS = [
-  { label: "Collection", href: "#collection" },
-  { label: "Ingredients", href: "#ingredients" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Collection", href: "/#collection" },
+  { label: "Brands", href: "/#brands" },
+  { label: "Ingredients", href: "/#ingredients" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export function MobileNav() {
@@ -60,23 +62,23 @@ export function MobileNav() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.06 }}
                   >
-                    <a
+                    <Link
                       href={link.href}
                       onClick={() => setOpen(false)}
                       className="font-serif text-3xl sm:text-4xl text-cream hover:text-gold-soft transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </motion.li>
                 ))}
               </ul>
               <div className="mt-10">
                 <MagneticButton
-                  href="#contact"
+                  href="/#contact"
                   onClick={() => setOpen(false)}
                   className="w-full justify-center"
                 >
-                  Visit Boutique
+                  Order Online
                 </MagneticButton>
               </div>
             </motion.nav>

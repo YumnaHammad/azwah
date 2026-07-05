@@ -17,6 +17,8 @@ const PHASE_LABELS: Record<string, string> = {
 export function MobileScrollProgress() {
   const { phase, progress } = useSceneState();
 
+  if (progress > 0.78) return null;
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 xl:hidden pointer-events-none safe-bottom">
       <div className="px-4 pb-4 pt-2 bg-gradient-to-t from-primary-dark/90 via-primary-dark/50 to-transparent">

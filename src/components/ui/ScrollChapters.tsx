@@ -18,6 +18,8 @@ export function ScrollChapters() {
   const { phase, progress } = useSceneState();
   const idx = CHAPTERS.findIndex((c) => c.key === phase);
 
+  if (progress > 0.78) return null;
+
   return (
     <div className="fixed right-6 md:right-10 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-4">
       {CHAPTERS.map((chapter, i) => {

@@ -11,7 +11,7 @@ export const INGREDIENTS = [
     name: "Oud",
     origin: "Assam",
     description:
-      "Aged heartwood resin — smoky, sacred, and impossibly deep.",
+      "Aged heartwood resin — smoky, sacred, and impossibly deep. Central to our house blends.",
     icon: "◈",
   },
   {
@@ -51,43 +51,25 @@ export const INGREDIENTS = [
   },
 ] as const;
 
-export const PRODUCTS = [
-  {
-    name: "Azwah Noir",
-    subtitle: "Eau de Parfum",
-    notes: "Oud · Amber · White Musk",
-    description: "Midnight elegance bottled. Bold, smoky, eternal.",
-    price: "$285",
-  },
-  {
-    name: "Azwah Rose",
-    subtitle: "Eau de Parfum",
-    notes: "Rose · Sandalwood · Saffron",
-    description: "Velvet petals meet golden spice. Romantic and refined.",
-    price: "$265",
-  },
-  {
-    name: "Azwah Gold",
-    subtitle: "Parfum Extrême",
-    notes: "Oud · Rose · Amber",
-    description: "Our rarest expression. Heirloom luxury in every drop.",
-    price: "$395",
-  },
-] as const;
-
 export const CONTACT = {
   address: "47 Avenue Montaigne, Paris 75008",
-  phone: "+33 1 42 86 00 00",
+  phone: "0300 9672021",
   email: "concierge@azwah.com",
   hours: "Mon – Sat · 10:00 – 20:00",
-  whatsapp: "https://wa.me/33142860000",
+  whatsapp: "https://wa.me/923009672021",
   maps: "https://maps.google.com/?q=47+Avenue+Montaigne+Paris",
 } as const;
 
 export const BRAND = {
   tagline: "Where heritage meets the sublime.",
   story:
-    "Our fragrances are inspired by timeless traditions, crafted with rare ingredients sourced across continents, and designed to leave unforgettable memories on skin and in spirit.",
+    "Azwah Enterprises is a luxury fragrance boutique — online and in person — offering men's, women's, and unisex perfumes from our own atelier and authorized houses including J. Perfume.",
   heritage:
-    "Founded on the belief that true luxury is felt — not announced — Azwah Enterprises composes scents for those who understand that elegance is eternal.",
+    "Founded on the belief that true luxury is felt — not announced — we compose scents for those who understand that elegance is eternal.",
+  mission:
+    "We make luxury fragrance accessible without compromise: authentic products, expert guidance, and delivery to your door. Every Azwah house blend uses ingredients we select and age ourselves.",
+  online:
+    "Order online via WhatsApp or email. Browse by category — men, women, unisex, or accessories — and receive your selection in protective, gift-ready packaging within days.",
+  ingredientsStory:
+    "Unlike mass-market fragrances, our house line is built from raw materials we source directly: Assam oud, Grasse rose, Baltic amber, Mysore sandalwood, and Kashmir saffron. Each composition is blended in small batches in our atelier.",
 } as const;

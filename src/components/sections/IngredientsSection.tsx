@@ -112,8 +112,8 @@ export function IngredientsSection() {
             <span className="text-gradient-gold">distinction</span>
           </h2>
           <p className="mt-8 text-cream/40 text-sm md:text-base max-w-xl mx-auto font-light leading-relaxed">
-            Six precious ingredients — each sourced from its native terroir,
-            each chosen for its irreplaceable character.
+            Six precious ingredients in our own compositions — each sourced from its native
+            terroir and blended in our atelier. Partner fragrances feature house-selected notes.
           </p>
         </div>
 

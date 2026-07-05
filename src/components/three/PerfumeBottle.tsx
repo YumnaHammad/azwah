@@ -47,6 +47,43 @@ export function PerfumeBottle() {
     return mat;
   }, []);
 
+  const labelTexture = useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 128;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+
+    ctx.fillStyle = "#F5F5F0";
+    ctx.fillRect(0, 0, 512, 128);
+
+    ctx.strokeStyle = "rgba(184, 154, 62, 0.25)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(6, 6, 500, 116);
+
+    ctx.fillStyle = "#083D2B";
+    ctx.font = "600 56px Georgia, 'Times New Roman', serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("AZWAH", 256, 66);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.anisotropy = 4;
+    return texture;
+  }, []);
+
+  const labelMat = useMemo(() => {
+    return new THREE.MeshStandardMaterial({
+      map: labelTexture ?? undefined,
+      color: labelTexture ? "#ffffff" : "#FAFAFA",
+      metalness: 0.2,
+      roughness: 0.35,
+      transparent: true,
+      opacity: 0.95,
+    });
+  }, [labelTexture]);
+
   useFrame(() => {
     if (groupRef.current) {
       groupRef.current.rotation.y =
@@ -93,19 +130,12 @@ export function PerfumeBottle() {
         <boxGeometry args={[0.62, 0.04, 0.44]} />
       </mesh>
 
-      {/* Front label */}
+      {/* Front label with AZWAH branding */}
       <mesh position={[0, 0.72, 0.248]} material={goldMat}>
         <boxGeometry args={[0.42, 0.32, 0.012]} />
       </mesh>
-      <mesh position={[0, 0.72, 0.255]}>
-        <planeGeometry args={[0.28, 0.06]} />
-        <meshStandardMaterial
-          color="#FAFAFA"
-          metalness={0.4}
-          roughness={0.4}
-          transparent
-          opacity={0.85}
-        />
+      <mesh position={[0, 0.72, 0.256]} material={labelMat}>
+        <planeGeometry args={[0.28, 0.07]} />
       </mesh>
 
       {/* Dip tube */}

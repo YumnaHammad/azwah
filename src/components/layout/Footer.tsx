@@ -5,7 +5,13 @@ import { motion } from "framer-motion";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { BRAND } from "@/lib/constants";
 
-const NAV = ["Collection", "Ingredients", "About", "Contact"];
+const NAV = [
+  { label: "Collection", href: "/#collection" },
+  { label: "Brands", href: "/#brands" },
+  { label: "Ingredients", href: "/#ingredients" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/#contact" },
+];
 const SOCIAL = ["Instagram", "Pinterest", "LinkedIn"];
 
 export function Footer() {
@@ -38,12 +44,12 @@ export function Footer() {
           <p className="section-label mb-5">Navigate</p>
           <ul className="space-y-3">
             {NAV.map((link) => (
-              <li key={link}>
+              <li key={link.label}>
                 <a
-                  href={`#${link.toLowerCase()}`}
+                  href={link.href}
                   className="text-cream/40 text-sm hover:text-gold-soft transition-colors duration-500 link-underline inline-block"
                 >
-                  {link}
+                  {link.label}
                 </a>
               </li>
             ))}
@@ -99,7 +105,7 @@ export function Footer() {
         <p className="text-cream/20 text-xs tracking-wider">
           © 2026 Azwah Enterprises. All rights reserved.
         </p>
-        <MagneticButton className="!px-5 !py-2.5 !text-[10px] w-full sm:w-auto justify-center">
+        <MagneticButton href="/#collection" className="!px-5 !py-2.5 !text-[10px] w-full sm:w-auto justify-center">
           Discover Collection
         </MagneticButton>
       </div>

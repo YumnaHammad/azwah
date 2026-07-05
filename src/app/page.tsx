@@ -8,11 +8,14 @@ import {
   useBreakpoint,
   getScrollHeight,
   getContentThreshold,
+  getContentPullUp,
 } from "@/hooks/useBreakpoint";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { StoryOverlay, HeroIntro } from "@/components/sections/StoryOverlay";
 import { ProductsSection } from "@/components/sections/ProductsSection";
+import { BrandsSection } from "@/components/sections/BrandsSection";
+import { ServicesSection } from "@/components/sections/ServicesSection";
 import { IngredientsSection } from "@/components/sections/IngredientsSection";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { ContactSection } from "@/components/sections/ContactSection";
@@ -56,6 +59,8 @@ function ScrollStory() {
 
 function BackgroundLayer() {
   const bp = useBreakpoint();
+  const { progress } = useSceneState();
+  if (progress > 0.8) return null;
   if (bp === "mobile") return <MobileHeroVisual />;
   return <SceneCanvas compact={bp === "tablet"} />;
 }
@@ -65,18 +70,22 @@ function ContentSections() {
   const bp = useBreakpoint();
   const threshold = getContentThreshold(bp);
   const visible = progress > threshold;
+  const pullUp = getContentPullUp(bp);
 
   return (
     <div
-      className="content-layer relative z-20 transition-all duration-700"
+      className="content-layer relative z-20 transition-all duration-500 isolate"
       style={{
+        marginTop: pullUp,
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(32px)",
+        transform: visible ? "translateY(0)" : "translateY(24px)",
         pointerEvents: visible ? "auto" : "none",
       }}
     >
       <div className="section-bg">
         <ProductsSection />
+        <BrandsSection />
+        <ServicesSection />
         <IngredientsSection />
         <AboutSection />
         <ContactSection />

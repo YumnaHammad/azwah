@@ -56,7 +56,11 @@ export function MobileHeroVisual() {
           <div className="relative w-[72px] h-[140px] sm:w-[88px] sm:h-[168px] mx-auto">
             <div className="absolute inset-x-0.5 bottom-0 top-7 sm:top-8 rounded-lg bg-gradient-to-b from-white/[0.08] to-white/[0.03] border border-white/10 backdrop-blur-md shadow-[0_0_32px_rgba(216,198,106,0.1)]" />
             <div className="absolute inset-x-2.5 sm:inset-x-3 top-9 sm:top-10 bottom-3 rounded-md bg-gradient-to-b from-[#4a2810]/85 to-[#2a1508]/90" />
-            <div className="absolute inset-x-3 sm:inset-x-4 top-[60px] sm:top-[72px] h-8 sm:h-10 border border-gold/30 rounded-sm bg-gold/5" />
+            <div className="absolute inset-x-3 sm:inset-x-4 top-[60px] sm:top-[72px] h-8 sm:h-10 border border-gold/30 rounded-sm bg-[#F5F5F0]/95 flex items-center justify-center shadow-inner">
+              <span className="font-serif text-[8px] sm:text-[9px] font-semibold tracking-[0.32em] text-primary-dark uppercase">
+                AZWAH
+              </span>
+            </div>
             <div className="absolute inset-x-1.5 bottom-0.5 h-1 sm:h-1.5 bg-gold/40 rounded-sm" />
 
             <div className="absolute inset-x-[28px] sm:inset-x-[34px] top-[44px] sm:top-[52px] h-2.5 sm:h-3 bg-neutral-300/80 rounded-sm z-10" />

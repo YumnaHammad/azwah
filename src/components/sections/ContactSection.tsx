@@ -51,8 +51,8 @@ export function ContactSection() {
             <span className="text-gradient-gold">the boutique.</span>
           </h2>
           <p className="text-cream/45 text-base leading-relaxed font-light max-w-md mb-10">
-            Walk through our doors — virtually or in person. Our concierge awaits
-            to guide you through the Azwah collection.
+            Order online or visit in person. Men&apos;s, women&apos;s, and unisex fragrances —
+            including J. Perfume — shipped with gift wrapping and concierge support.
           </p>
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
             <MagneticButton href={CONTACT.maps} className="w-full sm:w-auto justify-center">

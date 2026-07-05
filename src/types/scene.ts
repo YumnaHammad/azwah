@@ -112,7 +112,7 @@ export function computeSceneState(progress: number): SceneState {
   const ambientIntensity = 0.35 + environmentWarmth * 0.85;
   const goldIntensity = 0.55 + environmentWarmth * 1.15;
   const particleOpacity = 0.3 + rangeMap(p, 0.04, 0.85) * 0.7;
-  const canvasOpacity = 1 - rangeMap(p, 0.92, 1.0);
+  const canvasOpacity = 1 - rangeMap(p, 0.72, 0.86);
 
   return {
     progress: p,

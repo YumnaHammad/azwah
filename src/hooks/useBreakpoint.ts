@@ -60,11 +60,11 @@ export function useIsTouchDevice() {
 export function getScrollHeight(bp: Breakpoint) {
   switch (bp) {
     case "mobile":
-      return "min(420vh, 3200px)";
+      return "min(360vh, 2800px)";
     case "tablet":
-      return "min(520vh, 4200px)";
+      return "min(440vh, 3600px)";
     default:
-      return "650vh";
+      return "520vh";
   }
 }
 
@@ -72,10 +72,22 @@ export function getScrollHeight(bp: Breakpoint) {
 export function getContentThreshold(bp: Breakpoint) {
   switch (bp) {
     case "mobile":
-      return 0.72;
+      return 0.7;
     case "tablet":
-      return 0.78;
+      return 0.74;
     default:
-      return 0.8;
+      return 0.76;
+  }
+}
+
+/** Pull content up to remove dead gap after scroll story */
+export function getContentPullUp(bp: Breakpoint) {
+  switch (bp) {
+    case "mobile":
+      return "min(-108vh, -820px)";
+    case "tablet":
+      return "min(-115vh, -950px)";
+    default:
+      return "-118vh";
   }
 }
