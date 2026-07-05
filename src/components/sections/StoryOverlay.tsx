@@ -94,8 +94,8 @@ export function StoryOverlay() {
       {/* Spacer — bottle lives here visually */}
       <div className="flex-1 min-h-[28vh] sm:min-h-[32vh] md:min-h-[36vh]" aria-hidden="true" />
 
-      {/* Body copy — bottom, above mobile progress bar */}
-      <div className="shrink-0 px-4 sm:px-6 md:px-12 lg:px-20 pb-[max(6rem,calc(env(safe-area-inset-bottom)+4.5rem))] sm:pb-28 md:pb-32 max-w-lg">
+      {/* Body copy — above hero banner strip */}
+      <div className="shrink-0 px-4 sm:px-6 md:px-12 lg:px-20 pb-6 sm:pb-8 md:pb-10 max-w-lg">
         <AnimatePresence mode="wait">
           <motion.p
             key={`${phase}-body`}
@@ -114,7 +114,7 @@ export function StoryOverlay() {
 
       {/* Scroll hint — desktop/tablet only (mobile uses progress bar) */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
+        className="absolute bottom-24 sm:bottom-28 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2"
         animate={{ opacity: progress < 0.1 ? 0.5 : 0 }}
       >
         <span className="text-[9px] sm:text-[10px] tracking-[0.35em] uppercase text-cream/40">

@@ -441,11 +441,34 @@ body {
   .hero-bg-fog,
   .atmosphere-spread,
   .atmosphere-particle,
-  .scroll-line {
+  .scroll-line,
+  .logo-marquee-track {
+    animation: none !important;
+  }
+
+  .luxury-carousel-autoplay {
     animation: none !important;
   }
 
   .canvas-container {
     transition: none;
+  }
+}
+
+/* Infinite logo marquee */
+.logo-marquee {
+  position: relative;
+}
+
+.logo-marquee-track {
+  animation: logo-marquee-scroll 45s linear infinite;
+}
+
+@keyframes logo-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }

@@ -13,6 +13,9 @@ import {
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { StoryOverlay, HeroIntro } from "@/components/sections/StoryOverlay";
+import { PromoCarouselSection } from "@/components/sections/PromoCarouselSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
+import { WhyAzwahSection } from "@/components/sections/WhyAzwahSection";
 import { ProductsSection } from "@/components/sections/ProductsSection";
 import { BrandsSection } from "@/components/sections/BrandsSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
@@ -23,6 +26,7 @@ import { ScrollChapters } from "@/components/ui/ScrollChapters";
 import { MobileScrollProgress } from "@/components/ui/MobileScrollProgress";
 import { AtmosphereOverlay } from "@/components/ui/AtmosphereOverlay";
 import { CursorSpotlight } from "@/components/ui/CursorSpotlight";
+import { LogoMarquee } from "@/components/ui/LogoMarquee";
 import { MobileHeroVisual } from "@/components/mobile/MobileHeroVisual";
 
 const SceneCanvas = dynamic(
@@ -41,17 +45,21 @@ function ScrollStory() {
       className="relative"
       style={{ height: getScrollHeight(bp) }}
     >
-      <div className="sticky top-0 h-[100dvh] min-h-screen overflow-hidden">
-        <HeroIntro />
-        <StoryOverlay />
-        <AtmosphereOverlay />
-        <div
-          className="absolute inset-0 pointer-events-none transition-all duration-1000"
-          style={{
-            background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(216,198,106,${fragranceSpread * 0.08}) 0%, transparent 70%)`,
-            opacity: Math.max(0, (progress - 0.82) * 3),
-          }}
-        />
+      <div className="sticky top-0 h-[100dvh] min-h-screen overflow-hidden flex flex-col">
+        <div className="relative flex-1 min-h-0 overflow-hidden">
+          <HeroIntro />
+          <StoryOverlay />
+          <AtmosphereOverlay />
+          <div
+            className="absolute inset-0 pointer-events-none transition-all duration-1000"
+            style={{
+              background: `radial-gradient(ellipse 80% 60% at 50% 50%, rgba(216,198,106,${fragranceSpread * 0.08}) 0%, transparent 70%)`,
+              opacity: Math.max(0, (progress - 0.82) * 3),
+            }}
+          />
+        </div>
+        {/* Logo banner — pinned to bottom of hero */}
+        <LogoMarquee className="shrink-0 z-[25] border-t border-gold/20 max-xl:mb-12 xl:mb-0 safe-bottom" />
       </div>
     </div>
   );
@@ -84,9 +92,12 @@ function ContentSections() {
     >
       <div className="section-bg">
         <ProductsSection />
+        <PromoCarouselSection />
         <BrandsSection />
+        <TestimonialsSection />
         <ServicesSection />
         <IngredientsSection />
+        <WhyAzwahSection />
         <AboutSection />
         <ContactSection />
         <Footer />
