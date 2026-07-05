@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { readProducts, writeProducts } from "@/lib/db/store";
 import type { Product } from "@/types/product";
 
+export const dynamic = "force-dynamic";
+
 function slugify(name: string) {
   return name
     .toLowerCase()

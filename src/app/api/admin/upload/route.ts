@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const url = await saveUploadedFile(filename, buffer);
+    const url = await saveUploadedFile(filename, buffer, file.type);
     return NextResponse.json({ url });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });

@@ -1,5 +1,9 @@
+import "server-only";
+
 import fs from "fs/promises";
 import path from "path";
+import { Redis } from "@upstash/redis";
+import { put } from "@vercel/blob";
 import type { Product } from "@/types/product";
 import type { SiteContent } from "@/types/cms";
 import { getDefaultSiteContent } from "./defaults";
@@ -9,12 +13,34 @@ const PRODUCTS_FILE = path.join(DATA_DIR, "products.json");
 const SITE_FILE = path.join(DATA_DIR, "site.json");
 const UPLOADS_DIR = path.join(process.cwd(), "public", "uploads");
 
-async function ensureDataDir() {
+const REDIS_PRODUCTS_KEY = "azwah:products";
+const REDIS_SITE_KEY = "azwah:site";
+
+function hasRedis(): boolean {
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+  return Boolean(url && token);
+}
+
+function getRedis(): Redis {
+  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+  if (!url || !token) {
+    throw new Error("Redis is not configured. Add Upstash Redis or Vercel KV to your project.");
+  }
+  return new Redis({ url, token });
+}
+
+function hasBlob(): boolean {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
+
+async function ensureLocalDirs() {
   await fs.mkdir(DATA_DIR, { recursive: true });
   await fs.mkdir(UPLOADS_DIR, { recursive: true });
 }
 
-async function readJsonFile<T>(filePath: string): Promise<T | null> {
+async function readLocalJson<T>(filePath: string): Promise<T | null> {
   try {
     const raw = await fs.readFile(filePath, "utf-8");
     return JSON.parse(raw) as T;
@@ -23,33 +49,62 @@ async function readJsonFile<T>(filePath: string): Promise<T | null> {
   }
 }
 
-async function writeJsonFile<T>(filePath: string, data: T) {
-  await ensureDataDir();
+async function writeLocalJson<T>(filePath: string, data: T) {
+  await ensureLocalDirs();
   await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
 
-/** Seed products from bundled defaults (lazy import avoids circular deps) */
 async function seedProducts(): Promise<Product[]> {
   const { DEFAULT_PRODUCTS } = await import("@/lib/default-products");
-  await writeJsonFile(PRODUCTS_FILE, DEFAULT_PRODUCTS);
+  await writeProducts(DEFAULT_PRODUCTS);
   return DEFAULT_PRODUCTS;
 }
 
 export async function readProducts(): Promise<Product[]> {
-  await ensureDataDir();
-  const existing = await readJsonFile<Product[]>(PRODUCTS_FILE);
+  if (hasRedis()) {
+    const redis = getRedis();
+    const cached = await redis.get<Product[]>(REDIS_PRODUCTS_KEY);
+    if (cached?.length) return cached;
+    return seedProducts();
+  }
+
+  await ensureLocalDirs();
+  const existing = await readLocalJson<Product[]>(PRODUCTS_FILE);
   if (existing?.length) return existing;
   return seedProducts();
 }
 
 export async function writeProducts(products: Product[]) {
-  await writeJsonFile(PRODUCTS_FILE, products);
+  if (hasRedis()) {
+    const redis = getRedis();
+    await redis.set(REDIS_PRODUCTS_KEY, products);
+    return;
+  }
+
+  await writeLocalJson(PRODUCTS_FILE, products);
 }
 
 export async function readSiteContent(): Promise<SiteContent> {
-  await ensureDataDir();
-  const existing = await readJsonFile<SiteContent>(SITE_FILE);
   const defaults = getDefaultSiteContent();
+
+  if (hasRedis()) {
+    const redis = getRedis();
+    const existing = await redis.get<SiteContent>(REDIS_SITE_KEY);
+    if (existing) {
+      return {
+        ...defaults,
+        ...existing,
+        brand: { ...defaults.brand, ...existing.brand },
+        contact: { ...defaults.contact, ...existing.contact },
+        banners: existing.banners?.length ? existing.banners : defaults.banners,
+      };
+    }
+    await writeSiteContent(defaults);
+    return defaults;
+  }
+
+  await ensureLocalDirs();
+  const existing = await readLocalJson<SiteContent>(SITE_FILE);
   if (existing) {
     return {
       ...defaults,
@@ -59,27 +114,44 @@ export async function readSiteContent(): Promise<SiteContent> {
       banners: existing.banners?.length ? existing.banners : defaults.banners,
     };
   }
-  await writeJsonFile(SITE_FILE, defaults);
+  await writeSiteContent(defaults);
   return defaults;
 }
 
 export async function writeSiteContent(content: SiteContent) {
-  await writeJsonFile(SITE_FILE, content);
+  if (hasRedis()) {
+    const redis = getRedis();
+    await redis.set(REDIS_SITE_KEY, content);
+    return;
+  }
+
+  await writeLocalJson(SITE_FILE, content);
 }
 
 export function getUploadsDir() {
   return UPLOADS_DIR;
 }
 
-export async function saveUploadedFile(filename: string, buffer: Buffer) {
-  await ensureDataDir();
+export async function saveUploadedFile(filename: string, buffer: Buffer, contentType?: string) {
   const safe = filename.replace(/[^a-zA-Z0-9._-]/g, "_");
+
+  if (hasBlob()) {
+    const blob = await put(`azwah/uploads/${safe}`, buffer, {
+      access: "public",
+      contentType: contentType || "application/octet-stream",
+      allowOverwrite: true,
+    });
+    return blob.url;
+  }
+
+  await ensureLocalDirs();
   const filepath = path.join(UPLOADS_DIR, safe);
   await fs.writeFile(filepath, buffer);
   return `/uploads/${safe}`;
 }
 
 export async function deleteUploadedFile(url: string) {
+  if (url.startsWith("http")) return;
   if (!url.startsWith("/uploads/")) return;
   const filepath = path.join(process.cwd(), "public", url);
   try {
@@ -87,4 +159,9 @@ export async function deleteUploadedFile(url: string) {
   } catch {
     /* ignore */
   }
+}
+
+/** Used by admin health — confirms persistent storage is configured on Vercel */
+export function getStorageMode(): "redis" | "local" {
+  return hasRedis() ? "redis" : "local";
 }

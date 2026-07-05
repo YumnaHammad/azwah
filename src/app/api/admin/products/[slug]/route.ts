@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { readProducts, writeProducts } from "@/lib/db/store";
 import type { Product } from "@/types/product";
 
+export const dynamic = "force-dynamic";
+
 type Params = { params: Promise<{ slug: string }> };
 
 export async function GET(_request: Request, { params }: Params) {

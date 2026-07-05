@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { readSiteContent, writeSiteContent } from "@/lib/db/store";
 import type { SiteContent } from "@/types/cms";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const site = await readSiteContent();
   return NextResponse.json(site);
