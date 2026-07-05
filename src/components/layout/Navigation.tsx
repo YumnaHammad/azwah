@@ -31,7 +31,7 @@ export function Navigation() {
         animate={{ opacity: showLinks ? 1 : 0.4 }}
       >
         {[
-          { label: "Collection", href: "#collection" },
+          { label: "Collection", href: "/products" },
           { label: "Brands", href: "#brands" },
           { label: "Ingredients", href: "#ingredients" },
           { label: "About", href: "/about" },

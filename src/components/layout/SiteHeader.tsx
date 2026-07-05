@@ -6,7 +6,7 @@ import { MobileNav } from "@/components/layout/MobileNav";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const LINKS = [
-  { label: "Collection", href: "/#collection" },
+  { label: "Collection", href: "/products" },
   { label: "Brands", href: "/#brands" },
   { label: "Ingredients", href: "/#ingredients" },
   { label: "About", href: "/about" },
@@ -36,7 +36,12 @@ export function SiteHeader({ variant = "solid" }: { variant?: "solid" | "transpa
 
       <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
         {LINKS.map((link) => {
-          const active = link.href === "/about" ? pathname === "/about" : false;
+          const active =
+            link.href === "/about"
+              ? pathname === "/about"
+              : link.href === "/products"
+                ? pathname.startsWith("/products")
+                : false;
           return (
             <Link
               key={link.href}

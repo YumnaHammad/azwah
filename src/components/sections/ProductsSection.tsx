@@ -3,20 +3,15 @@
 import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Link from "next/link";
 import { PRODUCTS } from "@/lib/products";
 import type { Product, CategoryFilter } from "@/types/product";
 import { ProductCard } from "@/components/products/ProductCard";
+import { ProductFilterBar } from "@/components/products/ProductFilterBar";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FILTERS: { id: CategoryFilter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "men", label: "Men" },
-  { id: "women", label: "Women" },
-  { id: "unisex", label: "Unisex" },
-  { id: "accessories", label: "Accessories" },
-];
+const HOME_PREVIEW_COUNT = 6;
 
 function filterProducts(filter: CategoryFilter): Product[] {
   if (filter === "all") return PRODUCTS;
@@ -28,6 +23,8 @@ export function ProductsSection() {
   const titleRef = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<CategoryFilter>("all");
   const filtered = filterProducts(filter);
+  const preview = filtered.slice(0, HOME_PREVIEW_COUNT);
+  const hasMore = filtered.length > HOME_PREVIEW_COUNT;
 
   useEffect(() => {
     const title = titleRef.current;
@@ -40,6 +37,9 @@ export function ProductsSection() {
       scrollTrigger: { trigger: sectionRef.current, start: "top 70%" },
     });
   }, []);
+
+  const viewAllHref =
+    filter === "all" ? "/products" : `/products?category=${filter}`;
 
   return (
     <section id="collection" ref={sectionRef} className="section-pad px-0 overflow-hidden">
@@ -59,25 +59,15 @@ export function ProductsSection() {
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 sm:mb-14">
-            {FILTERS.map((f) => (
-              <button
-                key={f.id}
-                type="button"
-                onClick={() => setFilter(f.id)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-[10px] tracking-[0.2em] uppercase border transition-all duration-300 ${
-                  filter === f.id
-                    ? "border-gold/50 bg-gold/10 text-gold-soft"
-                    : "border-white/10 text-cream/40 hover:border-gold/25 hover:text-cream/70"
-                }`}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
+          <ProductFilterBar
+            value={filter}
+            onChange={setFilter}
+            count={preview.length}
+            total={filtered.length}
+          />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
-            {filtered.map((p, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 mt-8 sm:mt-10">
+            {preview.map((p, i) => (
               <ProductCard key={p.slug} product={p} index={i} />
             ))}
           </div>
@@ -86,14 +76,18 @@ export function ProductsSection() {
             <p className="text-center text-cream/40 py-12">No products in this category yet.</p>
           )}
 
-          <div className="text-center mt-12 sm:mt-16">
-            <Link
-              href="/about"
-              className="text-[10px] tracking-[0.3em] uppercase text-cream/35 hover:text-gold-soft transition-colors link-underline"
-            >
-              Learn About Our Brands →
-            </Link>
-          </div>
+          {filtered.length > 0 && (
+            <div className="text-center mt-12 sm:mt-16 pt-10 border-t border-gold/10">
+              {hasMore && (
+                <p className="text-cream/30 text-xs tracking-[0.15em] uppercase mb-5">
+                  Showing {preview.length} of {filtered.length} in this category
+                </p>
+              )}
+              <MagneticButton href={viewAllHref} className="!px-10">
+                View All Products
+              </MagneticButton>
+            </div>
+          )}
         </div>
       </div>
     </section>

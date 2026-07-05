@@ -6,7 +6,7 @@ import Link from "next/link";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const LINKS = [
-  { label: "Collection", href: "/#collection" },
+  { label: "Collection", href: "/products" },
   { label: "Brands", href: "/#brands" },
   { label: "Ingredients", href: "/#ingredients" },
   { label: "About", href: "/about" },

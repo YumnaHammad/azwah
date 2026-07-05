@@ -6,7 +6,7 @@ import { MagneticButton } from "@/components/ui/MagneticButton";
 import { BRAND } from "@/lib/constants";
 
 const NAV = [
-  { label: "Collection", href: "/#collection" },
+  { label: "Collection", href: "/products" },
   { label: "Brands", href: "/#brands" },
   { label: "Ingredients", href: "/#ingredients" },
   { label: "About", href: "/about" },
@@ -105,7 +105,7 @@ export function Footer() {
         <p className="text-cream/20 text-xs tracking-wider">
           © 2026 Azwah Enterprises. All rights reserved.
         </p>
-        <MagneticButton href="/#collection" className="!px-5 !py-2.5 !text-[10px] w-full sm:w-auto justify-center">
+        <MagneticButton href="/products" className="!px-5 !py-2.5 !text-[10px] w-full sm:w-auto justify-center">
           Discover Collection
         </MagneticButton>
       </div>
